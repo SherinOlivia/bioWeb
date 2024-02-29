@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "keywords": ["NextJs","tailwindcss","personal-website","ReactJs"],
+  "author": "Sherin Olivia",
   "dependencies": {
     "next": "14.1.0",
     "react": "^18",

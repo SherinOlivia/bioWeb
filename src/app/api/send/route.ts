@@ -1,24 +1,39 @@
 import { EmailTemplate } from '../../components/EmailTemplate';
 import { Resend } from 'resend';
-import { ReactNode } from 'react'; // Import ReactNode from 'react'
-import { renderToString } from 'react-dom/server';
+import { ReactNode } from 'react';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const fromEmail = process.env.FROM_EMAIL as string
 
-export async function POST() {
+// interface EmailRequestBody {
+//   email: string;
+//   subject: string;
+//   message: string;
+// }
+
+
+
+export async function POST(req: NextApiRequest, res: NextApiResponse) {
+  const { email, subject, message } = await req.body as { email: string, subject: string, message: string };
   try {
-    const emailContent: ReactNode = EmailTemplate({ firstName: 'John' }); // Type assertion to ReactNode
-    const textVersionContent: string = renderToString(emailContent);
+    const emailContent: ReactNode = EmailTemplate({ subject, message });
+    const textVersionContent = emailContent as string;
+    
     const data = await resend.emails.send({
-      from: 'Roo <solivia198@gmail.com>',
-      to: ['sochronicle@gmail.com'],
-      subject: 'Hello world',
+      from: fromEmail,
+      to: [fromEmail, email],
+      subject: subject,
       react: emailContent,
       text: textVersionContent,
     });
-
-    return Response.json(data);
+    if (!data) {
+      return NextResponse.json("fail");
+    }
+    return NextResponse.json(data);
   } catch (error) {
-    return Response.json({ error });
+    return NextResponse.json({ error });
   }
 }
+

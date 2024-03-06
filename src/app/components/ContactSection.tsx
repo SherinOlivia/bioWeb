@@ -10,12 +10,13 @@ const ContactSection = () => {
     const [emailSubmitted, setEmailSubmitted] = useState(false);
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const target = e.target as HTMLFormElement
+        const formData = new FormData(e.currentTarget);
         const data = {
-          email: target.email.value,
-          subject: target.subject.value,
-          message: target.message.value,
+        email: formData.get("email") as string,
+        subject: formData.get("subject") as string,
+        message: formData.get("message") as string,
         };
+        console.log(data, data.email, data.subject, data.message)
         const JSONdata = JSON.stringify(data);
         const endpoint = "/api/send";
     
@@ -29,7 +30,7 @@ const ContactSection = () => {
     
         const response = await fetch(endpoint, options);
         const resData = await response.json();
-        console.log(resData)
+        console.log(response, "tambah", resData)
         if (response.status === 200) {
           console.log("Message sent.");
           setEmailSubmitted(true);

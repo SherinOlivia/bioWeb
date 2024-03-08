@@ -7,7 +7,7 @@ interface TabButtonProps {
 }
 
 const TabButton: React.FC<TabButtonProps> = ({ active, selectTab, children}) => {
-    const buttonClasses = active ? 'text-white border-b border-purple-500' : 'text-[#ADBB7BE]'
+    const buttonClasses = active ? 'text-white border-b border-primary-500' : 'text-[#ADBB7BE]'
   return (
     <button onClick={selectTab}>
         <p className={`mr-3 font-semibold hover:text-white ${buttonClasses}`}>
